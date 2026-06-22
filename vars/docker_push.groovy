@@ -6,12 +6,12 @@ def call(Map config = [:]) {
     echo "Pushing Docker image: ${imageName}:${imageTag}"
     
     withCredentials([usernamePassword(
-        credentialsId: credentials,
-        usernameVariable: 'DOCKER_USERNAME',
-        passwordVariable: 'DOCKER_PASSWORD'
+        credentialsId: 'dockerHubCred',
+        usernameVariable: 'dockerHubUser',
+        passwordVariable: 'dockerHubPass'
     )]) {
         sh """
-            echo "\$DOCKER_PASSWORD" | docker login -u "\$DOCKER_USERNAME" --password-stdin
+            echo "\$dockerHubPass" | docker login -u "\$dockerHubUser" --password-stdin
             docker push ${imageName}:${imageTag}
             docker push ${imageName}:latest
         """
